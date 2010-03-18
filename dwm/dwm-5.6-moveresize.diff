@@ -1,0 +1,111 @@
+diff -Nup dwm-5.6.1/config.def.h dwm-test-5.6.1/config.def.h
+--- dwm-5.6.1/config.def.h	2009-07-26 09:01:50.000000000 -0400
++++ dwm-test-5.6.1/config.def.h	2009-08-18 11:54:19.243876473 -0400
+@@ -26,6 +26,7 @@ static const Rule rules[] = {
+ static const float mfact      = 0.55; /* factor of master area size [0.05..0.95] */
+ static const Bool resizehints = True; /* False means respect size hints in tiled resizals */
+ 
++#include "moveresize.c"
+ static const Layout layouts[] = {
+ 	/* symbol     arrange function */
+ 	{ "[]=",      tile },    /* first entry is default */
+diff -Nup dwm-5.6.1/dwm.c dwm-test-5.6.1/dwm.c
+--- dwm-5.6.1/dwm.c	2009-07-26 09:01:50.000000000 -0400
++++ dwm-test-5.6.1/dwm.c	2009-08-18 11:59:14.470577561 -0400
+@@ -83,7 +83,8 @@ struct Client {
+ 	char name[256];
+ 	float mina, maxa;
+ 	int x, y, w, h;
+-	int basew, baseh, incw, inch, maxw, maxh, minw, minh;
++	int basew, baseh, incw, inch, maxw, maxh, minw, minh, ismax, wasfloating;
++	int rx, ry, rw, rh;
+ 	int bw, oldbw;
+ 	unsigned int tags;
+ 	Bool isfixed, isfloating, isurgent;
+diff -Nup dwm-5.6.1/maximize.c dwm-test-5.6.1/maximize.c
+--- dwm-5.6.1/maximize.c	1969-12-31 19:00:00.000000000 -0500
++++ dwm-test-5.6.1/maximize.c	2009-08-18 12:09:37.070432312 -0400
+@@ -0,0 +1,45 @@
++void
++maximize(int x, int y, int w, int h) {
++	XEvent ev;
++
++	if(!sel || sel->isfixed)
++		return;
++	XRaiseWindow(dpy, sel->win);
++	if(!sel->ismax) {
++		if(!lt[sellt]->arrange || sel->isfloating)
++			sel->wasfloating = True;
++		else {
++			togglefloating(NULL);
++			sel->wasfloating = False;
++		}
++		sel->rx = sel->x;
++		sel->ry = sel->y;
++		sel->rw = sel->w;
++		sel->rh = sel->h;
++		resize(sel, x, y, w, h, True);
++		sel->ismax = True;
++	}
++	else {
++		resize(sel, sel->rx, sel->ry, sel->rw, sel->rh, True);
++		if(!sel->wasfloating)
++			togglefloating(NULL);
++		sel->ismax = False;
++	}
++	drawbar();
++	while(XCheckMaskEvent(dpy, EnterWindowMask, &ev));
++}
++
++void
++togglemaximize(const Arg *arg) {
++	maximize(wx, wy, ww - 2 * borderpx, wh - 2 * borderpx);
++}
++
++void
++toggleverticalmax(const Arg *arg) {
++	maximize(sel->x, wy, sel->w, wh - 2 * borderpx);
++}
++
++void
++togglehorizontalmax(const Arg *arg) {
++	maximize(wx, sel->y, ww - 2 * borderpx, sel->h);
++}
+diff -Nup dwm-5.6.1/moveresize.c dwm-test-5.6.1/moveresize.c
+--- dwm-5.6.1/moveresize.c	1969-12-31 19:00:00.000000000 -0500
++++ dwm-test-5.6.1/moveresize.c	2009-08-18 11:57:06.361103733 -0400
+@@ -0,0 +1,34 @@
++void
++moveresize(const Arg *arg) {
++	int x, y, w, h, nx, ny, nw, nh, ox, oy, ow, oh;
++	char xAbs, yAbs, wAbs, hAbs;
++	int msx, msy, dx, dy, nmx, nmy;
++	unsigned int dui;
++	Window dummy;
++
++	if (!sel || !arg)
++		return;
++	if (lt[sellt]->arrange && !sel->isfloating)
++		return;
++	if(sscanf((char *)arg->v, "%d%c %d%c %d%c %d%c", &x, &xAbs, &y, &yAbs, &w, &wAbs, &h, &hAbs) != 8)
++		return;
++	nx = xAbs == 'X' ? x : sel->x + x;
++	ny = yAbs == 'Y' ? y : sel->y + y;
++	nw = wAbs == 'W' ? w : sel->w + w;
++	nh = hAbs == 'H' ? h : sel->h + h;
++
++	ox = sel->x;
++	oy = sel->y;
++	ow = sel->w;
++	oh = sel->h;
++
++	XRaiseWindow(dpy, sel->win);
++	Bool xqp = XQueryPointer(dpy, root, &dummy, &dummy, &msx, &msy, &dx, &dy, &dui);
++	resize(sel, nx, ny, nw, nh, True);
++	if (xqp && ox <= msx && (ox + ow) >= msx && oy <= msy && (oy + oh) >= msy)
++	{
++		nmx = sx-ox+sel->w-ow-1 < 0 ? 0 : sx-ox+sel->w-ow-1;
++		nmy = sy-oy+sel->h-oh-1 < 0 ? 0 : sy-oy+sel->h-oh-1;
++		XWarpPointer(dpy, None, sel->win, 0, 0, 0, 0, nmx, nmy);
++	}
++}
