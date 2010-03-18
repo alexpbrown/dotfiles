@@ -1,0 +1,35 @@
+"" scroll faster
+noremap j 2j
+noremap k 2k
+noremap h 3h
+noremap l 3l
+"" remove close tab button
+set! browser.tabs.closeButtons=2
+"" select next/previous tab, first tab and last.
+noremap J gt 
+noremap K gT
+noremap gg g^
+noremap G g$
+"" change close tab to dd
+noremap d-d d
+"" insert in the first input field with i 
+noremap i gi
+"" use vims mark keys for quickmarks instead of unused localmarks.
+noremap "'" go
+noremap m M
+"" remove scrollbars
+""set guioptions-=rb
+"" open any popups in new tab
+set popups=1
+"" other junk
+set focuscontent
+"" char-hints-mod2.js
+let g:hintsio="io"
+set hlsearch
+"" only show tabline when its needed
+set showtabline=1
+noremap ,p	:dialog preferences<CR>
+noremap ,a      :dialog addons<CR>
+noremap ,b	:dialog bookmarks<CR>
+noremap delete H
+" vim: set ft=vimperator:

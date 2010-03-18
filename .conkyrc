@@ -1,0 +1,7 @@
+out_to_x no
+out_to_console yes
+mpd_host localhost
+mpd_port 6600
+
+TEXT
+${if_mpd_playing}${mpd_smart} :: ${endif}Gmail: ${execi 360 perl ~/bin/gmail.pl n} :: ${freq 1}MHz ${cpu cpu0}%/${cpu cpu1}% :: ${if_existing /sys/class/power_supply/BAT0/present}Bat ${battery_percent}% :: ${else}AC :: ${endif}${if_empty ${exec ifconfig wlan0 | grep 'inet addr:'}}${upspeed eth0} ${downspeed eth0}${else}${wireless_link_qual_perc wlan0}% ${wireless_essid wlan0} ${upspeed wlan0} ${downspeed wlan0}${endif} :: ${time %b %d %I:%M %p}

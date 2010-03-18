@@ -1,0 +1,46 @@
+Xcursor.theme: Vanilla-DMZ-AA 
+
+!URxvt*font:     xft:Dina:pixelsize=12
+!URxvt*boldFont: xft:Dina:pixelsize=12
+urxvt*font: xft:terminus:pixelsize=12 
+
+urxvt*scrollBar:   false
+urxvt*cursorBlink: true
+urxvt*visualBell: false
+urxvt*urgentOnBell: true
+!urxvt*cursorColor: #586377
+urxvt*perl-ext:    matcher
+URxvt.matcher.button: 1
+URxvt.matcher.pattern.1: \\bwww\\.[\\w-]+\\.[\\w./?&@#-]*[\\w/-]
+urxvt*urlLauncher: firefox
+urxvt*transparent: true
+
+!colortheme 12 from http://phraktured.net/terminal-colors/
+urxvt*background:   #000000
+!urxvt*backgroud:    rgba:0000/0000/0000/dddd
+urxvt*foreground:   #cacaca
+!black
+urxvt*color0:       #1d1c1f
+urxvt*color8:       #505050
+!urxvt*color8:       #6692af
+!red
+urxvt*color1:       #bf7276
+urxvt*color9:       #e5505f
+!green
+urxvt*color2:       #86af80
+urxvt*color10:      #87bc87
+!yellow
+urxvt*color3:       #968a38
+urxvt*color11:      #e0d95c
+!blue
+urxvt*color4:       #3673b5
+urxvt*color12:      #1b85d6
+!magenta
+urxvt*color5:       #9a70b2
+urxvt*color13:      #ad73ba
+!cyan
+urxvt*color6:       #7abecc
+urxvt*color14:      #338eaa
+!white
+urxvt*color7:       #dbdbdb
+urxvt*color15:      #f4f4f4
