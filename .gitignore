@@ -5,7 +5,6 @@
 .aspell.en.pws
 .bash_history
 .bash_profile
-.config/
 .dbus/
 .dmenu_cache
 .esd_auth
@@ -67,3 +66,4 @@ pictures/
 podcasts/
 untagged music/
 .conkyrc
+.config/*
