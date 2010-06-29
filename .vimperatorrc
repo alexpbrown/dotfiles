@@ -1,35 +1,47 @@
-"" scroll faster
-noremap j 2j
-noremap k 2k
-noremap h 3h
-noremap l 3l
-"" remove close tab button
-set! browser.tabs.closeButtons=2
+let mapleader = ","
+set wildoptions="auto"
+
+" smooth scroll setting
+let g:smooziee_scroll_amount="100"
+let g:smooziee_scroll_interval="150"
+
 "" select next/previous tab, first tab and last.
-noremap J gt 
+noremap J gt
 noremap K gT
 noremap gg g^
-noremap G g$
-"" change close tab to dd
-noremap d-d d
-"" insert in the first input field with i 
-noremap i gi
-"" use vims mark keys for quickmarks instead of unused localmarks.
-noremap "'" go
-noremap m M
-"" remove scrollbars
-""set guioptions-=rb
-"" open any popups in new tab
-set popups=1
-"" other junk
+noremap G g$ 
+
+"" insert in the first input field with i
+noremap i gi 
+
+"" remove close tab button
+set! browser.tabs.closeButtons=2
+
+" bring back/hide portions of the GUI
+noremap <silent> <leader>g :set guioptions+=mBT<CR>
+noremap <silent> <leader>G :set guioptions-=mBT<CR>
+noremap <silent> <leader>b :toolbartoggle Bookmarks Toolbar<CR>
+noremap <silent> <leader>y :set showtabline=2<CR>
+noremap <silent> <leader>u :set showtabline=0<CR>
+noremap <silent> <leader>s :emenu View.Status Bar<CR>
+
+" Make the RSS feed icon show in the vimperator status bar
+javascript <<EOF
+(function(){
+    var feedPanel = document.createElement("statusbarpanel");
+    feedPanel.setAttribute("id", "feed-panel-clone");
+    feedPanel.appendChild(document.getElementById("feed-button"));
+    feedPanel.firstChild.setAttribute("style", "padding: 0; max-height: 16px;");
+    document.getElementById("status-bar").insertBefore(feedPanel, document.getElementById("security-button"));
+})();
+EOF
+
+" Other settings
 set focuscontent
-"" char-hints-mod2.js
-let g:hintsio="io"
-set hlsearch
-"" only show tabline when its needed
-set showtabline=1
-noremap ,p	:dialog preferences<CR>
-noremap ,a      :dialog addons<CR>
-noremap ,b	:dialog bookmarks<CR>
 noremap delete H
+
+" Readability TODO:Why won't <silent> work?
+noremap <silent> <leader>r :open javascript:(function(){readConvertLinksToFootnotes=true;readStyle='style-athelas';readSize='size-medium';readMargin='margin-medium';_readability_script=document.createElement('script');_readability_script.type='text/javascript';_readability_script.src='http://lab.arc90.com/experiments/readability/js/readability.js?x='+(Math.random());document.documentElement.appendChild(_readability_script);_readability_css=document.createElement('link');_readability_css.rel='stylesheet';_readability_css.href='http://lab.arc90.com/experiments/readability/css/readability.css';_readability_css.type='text/css';_readability_css.media='all';document.documentElement.appendChild(_readability_css);_readability_print_css=document.createElement('link');_readability_print_css.rel='stylesheet';_readability_print_css.href='http://lab.arc90.com/experiments/readability/css/readability-print.css';_readability_print_css.media='print';_readability_print_css.type='text/css';document.getElementsByTagName('head')[0].appendChild(_readability_print_css);})();<CR>
+
+
 " vim: set ft=vimperator:
